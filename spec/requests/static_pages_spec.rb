@@ -2,45 +2,31 @@ require 'spec_helper'
 
 describe "Static pages" do
 
-  describe "Home page" do
+  let(:base_title) { "Ruby on Rails Tutorial Sample App" }
 
-    it "should have the content 'Sample App'" do
-      visit '/static_pages/home'
-      expect(page).to have_content('Sample App')
-    end
-    
-    it "should have the title 'Home'" do
-	  visit '/static_pages/home'
-	  expect(page).to have_title("Ruby on Rails Tutorial Sample App | Home")
-	end
-  end
+  test_pages = {
+  	home: "Home",
+  	help: "Help",
+  	about: "About Us",
+  	contact: "Contact"
+  }
+  
+  test_pages.each { |pg,tt|
 
-  describe "Help page" do
+	  describe "#{tt}" do
 
-    it "should have the content 'Help'" do
-      visit '/static_pages/help'
-      expect(page).to have_content('Help')
-    end
+		it "should have the content '#{tt}'" do
+		  visit "/static_pages/#{pg}"
+		  expect(page).to have_content("#{tt}")
+		end
+	
+		it "should have the title '#{tt}'" do
+		  visit "/static_pages/#{pg}"
+		  expect(page).to have_title("#{base_title} | #{tt}")
+		end
 
-    it "should have the title 'Help'" do
-	  visit '/static_pages/help'
-	  expect(page).to have_title("Ruby on Rails Tutorial Sample App | Help")
-	end
+	  end
 
-  end
-
-  describe "About page" do
-
-    it "should have the content 'About Us'" do
-      visit '/static_pages/about'
-      expect(page).to have_content('About Us')
-    end
-
-    it "should have the title 'About Us'" do
-	  visit '/static_pages/about'
-	  expect(page).to have_title("Ruby on Rails Tutorial Sample App | About Us")
-	end
-
-  end
+  } # test_pages.each
 
 end #describe Static pages
