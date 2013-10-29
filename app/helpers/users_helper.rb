@@ -7,4 +7,12 @@ module UsersHelper
     gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
     image_tag(gravatar_url, alt: user.name, class: "gravatar")
   end
+  
+  def find_user(p)
+  	if (p[:id].any?)
+	  User.find(p[:id])
+	elsif (p[:email].any?)
+	  User.find_by(email: p[:email])
+	end
+  end
 end
