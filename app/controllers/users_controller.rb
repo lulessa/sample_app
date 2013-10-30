@@ -1,7 +1,8 @@
 class UsersController < ApplicationController
-  before_action :signed_in_user, only: [:index, :edit, :update, :destroy]
+  before_action :signed_in_user, except: [:show, :new, :create]
   before_action :correct_user, only: [:edit, :update]
   before_action :admin_user, only: :destroy
+  before_action :not_signed_in_user, only: [:new, :create]
 
   def index
   	@users = User.paginate(page: params[:page])
@@ -39,9 +40,16 @@ class UsersController < ApplicationController
   end
   
   def destroy
-  	User.find(params[:id]).destroy
-  	flash[:success] = "User deleted."
-  	redirect_to users_url
+  	# we already checked if user is admin with before_action
+  	# now we have to stop an admin deleting herself
+	user = User.find(params[:id])
+	if current_user?(user)
+	  redirect_to root_url, alert: "Sorry, admin. You just can't delete yourself like that!"
+	else
+	  user.destroy
+	  flash[:success] = "User deleted."
+	  redirect_to users_url
+  	end
   end
 
   private
@@ -67,6 +75,10 @@ class UsersController < ApplicationController
 	
 	def admin_user
 	  redirect_to root_url unless current_user.admin?
+	end
+	
+	def not_signed_in_user
+	  redirect_to root_url if signed_in?
 	end
 
 end
