@@ -28,7 +28,7 @@ describe "User pages" do
 	  end
 	end
 	
-	  describe "delete links" do
+	describe "delete links" do
 
       it { should_not have_link('delete') }
 
@@ -54,8 +54,12 @@ describe "User pages" do
     let(:user) { FactoryGirl.create(:user) }
     let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "Foo") }
     let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "Bar") }
+	let(:other_user) { FactoryGirl.create(:user) }
 
-	before { visit user_path(user) }
+	before do
+	  sign_in other_user
+	  visit user_path(user)
+	end
 
 	it { should have_content(user.name) }
 	it { should have_title(user.name) }
@@ -64,6 +68,10 @@ describe "User pages" do
       it { should have_content(m1.content) }
       it { should have_content(m2.content) }
       it { should have_content(user.microposts.count) }
+      
+      describe "delete links should not appear for other user" do
+		it { should_not have_link('delete') }
+      end
     end
   end
 
