@@ -9,6 +9,11 @@ class User < ActiveRecord::Base
 					  uniqueness: { case_sensitive: false }
 	has_secure_password
 	validates :password, length: { minimum: 6 }
+	
+	def feed
+	  # will add followed users' posts later
+	  Micropost.where("user_id = ?", id)
+	end
 
 	def User.new_remember_token
 	  SecureRandom.urlsafe_base64

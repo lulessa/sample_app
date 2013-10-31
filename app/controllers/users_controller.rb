@@ -62,13 +62,6 @@ class UsersController < ApplicationController
     
     # before filters
     
-    def signed_in_user
-	  unless signed_in?
-	  	store_location
-		redirect_to signin_url, notice: "Please sign in."
-	  end
-    end
-    
     def correct_user
 	  @user = User.find(params[:id])    # moved here from edit/update methods
 	  redirect_to root_url unless current_user?(@user)
