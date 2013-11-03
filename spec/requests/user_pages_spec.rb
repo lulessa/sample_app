@@ -257,9 +257,19 @@ describe "User pages" do
         visit followers_user_path(other_user)
       end
 
-      it { should have_title(full_title('Followers')) }
+      it { should have_title(full_title(other_user.name + ' Followers')) }
       it { should have_selector('h3', text: 'Followers') }
       it { should have_link(user.name, href: user_path(user)) }
     end
+  
+	describe "user relationship stats" do
+	  before do
+	  	other_user.follow!(user)
+	  	visit user_path(user)
+	  end
+	  
+	  it { should have_link("1 following", href: following_user_path(user)) }
+	  it { should have_link("1 followers", href: followers_user_path(user)) }
+	end
   end
 end
