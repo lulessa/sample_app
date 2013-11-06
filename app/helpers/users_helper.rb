@@ -13,6 +13,8 @@ module UsersHelper
 	  User.find(p[:id])
 	elsif (p[:email].any?)
 	  User.find_by(email: p[:email])
+	elsif (p[:username].any?)
+	  User.find_by(username: p[:username])
 	end
   end
 end

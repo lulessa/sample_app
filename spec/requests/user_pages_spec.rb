@@ -149,8 +149,9 @@ describe "User pages" do
         before { click_button submit }
         let(:page_title) { 'Sign Up' }
         error_list = ["Name can't be blank", "Email can't be blank",
-					  "Email is invalid", "Password can't be blank",
-					  "Password is too short"]
+					  "Email is invalid", "Username can't be blank",
+					  "Username is invalid",
+					  "Password can't be blank", "Password is too short"]
 
         it { should have_title(full_title(page_title)) }
         it { should have_content('error') }
@@ -163,6 +164,7 @@ describe "User pages" do
     describe "with valid information" do
       before do
         fill_in "Name",         with: "Example User"
+        fill_in "Username",     with: "exampleuser"
         fill_in "Email",        with: "user@example.com"
         fill_in "Password",     with: "foobar"
         fill_in "Confirm Password", with: "foobar"
@@ -200,9 +202,11 @@ describe "User pages" do
   	
   	describe "with valid information" do
 	  let(:new_name)  { "New Name" }
+	  let(:new_username)  { "Newusername" }
       let(:new_email) { "new@example.com" }
       before do
         fill_in "Name",             with: new_name
+		fill_in "Username",         with: new_username
         fill_in "Email",            with: new_email
         fill_in "Password",         with: user.password
         fill_in "Confirm Password", with: user.password
@@ -213,6 +217,7 @@ describe "User pages" do
       it { should have_success_message('updated') }
       it { should have_link('Sign out', href: signout_path) }
       specify { expect(user.reload.name).to  eq new_name }
+      specify { expect(user.reload.username).to  eq new_username }
       specify { expect(user.reload.email).to eq new_email }
   	end
   	
