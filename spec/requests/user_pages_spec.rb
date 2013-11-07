@@ -63,6 +63,7 @@ describe "User pages" do
 
 	it { should have_content(user.name) }
 	it { should have_title(user.name) }
+	it { should have_content(user.username) }
 	
 	describe "microposts" do
       it { should have_content(m1.content) }
@@ -202,7 +203,7 @@ describe "User pages" do
   	
   	describe "with valid information" do
 	  let(:new_name)  { "New Name" }
-	  let(:new_username)  { "Newusername" }
+	  let(:new_username)  { "NewName" }
       let(:new_email) { "new@example.com" }
       before do
         fill_in "Name",             with: new_name

@@ -10,6 +10,7 @@ describe Micropost do
   it { should respond_to(:content) }
   it { should respond_to(:user_id) }
   it { should respond_to(:user) }
+  it { should respond_to(:replies) }
   its(:user) { should eq user }
 
   it { should be_valid }
@@ -27,5 +28,19 @@ describe Micropost do
   describe "with content that is too long" do
     before { @micropost.content = "a" * 141 }
     it { should_not be_valid }
+  end
+  
+  describe "reply associations" do
+  	before { @micropost.save }
+  	let!(:new_reply) { FactoryGirl.create(:reply, micropost: @micropost) }
+  	
+  	it "should destroy associated replies" do
+	  replies = @micropost.replies.to_a
+	  @micropost.destroy
+	  expect(replies).not_to be_empty
+	  replies.each do |reply|
+	  	expect(Reply.where(id: reply.id)).to be_empty
+	  end
+  	end
   end
 end

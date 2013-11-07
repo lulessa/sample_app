@@ -16,7 +16,7 @@ def make_users
 					   admin: true)
   99.times do |n|
 	name  = Faker::Name.name
-	username = Faker::Name.first_name + Faker::Name.last_name
+	username = name.gsub(/[^0-9A-Za-z]/, '')
 	email = "example-#{n+1}@railstutorial.org"
 	password  = "password"
 	User.create!(name: name,
