@@ -32,10 +32,7 @@ describe "Micropost pages" do
     
 	describe "with reply" do
 	  let(:other_user) { FactoryGirl.create(:user) }
-	  before do
-		fill_in 'micropost_content', with: "@#{other_user.username} e pluribus"
-		click_button "Post"
-	  end
+	  before { post_reply(other_user) }
 
 	  # Micropost.first gets latest is default scope is created_at DESC
 	  specify { expect(user.microposts.first.replies.first.reply_to).to eq other_user.id }

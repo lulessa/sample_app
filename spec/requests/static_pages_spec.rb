@@ -19,9 +19,15 @@ describe "Static pages" do
     
     describe "for signed-in users" do
       let(:user) { FactoryGirl.create(:user) }
+      let(:other_user) { FactoryGirl.create(:user) }
+      let(:reply_micropost) do
+      	FactoryGirl.create(:micropost, user: other_user, 
+									   content: "@#{user.username} E Pluribus")
+      end
       before do
         FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
         FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
+        FactoryGirl.create(:reply, micropost: reply_micropost, reply_to: user.id)
         sign_in user
         visit root_path
       end
@@ -31,6 +37,8 @@ describe "Static pages" do
           expect(page).to have_selector("li##{item.id}", text: item.content)
 		  expect(page).to have_link('delete')
         end
+        expect(page).to have_selector("li##{reply_micropost.id}",
+									  text: reply_micropost.content)
       end
       
       it "should have user's micropost count (pluralized)" do

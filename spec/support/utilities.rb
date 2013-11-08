@@ -18,6 +18,11 @@ def sign_in(user, options={})
   end
 end
 
+def post_reply(other_user)
+  fill_in 'micropost_content', with: "@#{other_user.username} e pluribus"
+  click_button "Post"
+end
+
 RSpec::Matchers.define :have_error_message do |message|
   match do |page|
     expect(page).to have_selector('div.alert.alert-error', text: message)
