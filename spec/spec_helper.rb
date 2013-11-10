@@ -43,6 +43,8 @@ Spork.prefork do
     #     --seed 1234
     config.order = "random"
     config.include Capybara::DSL
+	config.include(MailerMacros)
+	config.before(:each) { reset_email }
   end
 end
 
