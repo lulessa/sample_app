@@ -151,8 +151,7 @@ describe "User pages" do
         let(:page_title) { 'Sign Up' }
         error_list = ["Name can't be blank", "Email can't be blank",
 					  "Email is invalid", "Username can't be blank",
-					  "Username is invalid",
-					  "Password can't be blank", "Password is too short"]
+					  "Username is invalid", "Password can't be blank"]
 
         it { should have_title(full_title(page_title)) }
         it { should have_content('error') }
@@ -202,7 +201,7 @@ describe "User pages" do
 	  it { should have_link("change", href: "http://gravatar.com/emails") }
   	end
   	
-  	describe "with valid information" do
+  	describe "with valid information and blank password" do
 	  let(:new_name)  { "New Name" }
 	  let(:new_username)  { "NewName" }
       let(:new_email) { "new@example.com" }
@@ -210,8 +209,6 @@ describe "User pages" do
         fill_in "Name",             with: new_name
 		fill_in "Username",         with: new_username
         fill_in "Email",            with: new_email
-        fill_in "Password",         with: user.password
-        fill_in "Confirm Password", with: user.password
         uncheck	"user_follower_notification"
         click_button save_changes
       end
@@ -224,10 +221,15 @@ describe "User pages" do
       specify { expect(user.reload.email).to eq new_email }
   	end
   	
-  	describe "with invalid information" do
-	  before { click_button save_changes }
+  	describe "with invalid information (short password)" do
+	  before do
+		fill_in "Password",         with: "123"
+		fill_in "Confirm Password", with: "123"
+		click_button save_changes
+	  end
 	
 	  it { should have_error_message('error') }
+	  it { should have_content("Password is too short") }
   	end
 
   	describe "forbidden attributes" do

@@ -19,7 +19,8 @@ class User < ActiveRecord::Base
 					  format: { with: VALID_EMAIL_REGEX },
 					  uniqueness: { case_sensitive: false }
 	has_secure_password
-	validates :password, length: { minimum: 6 }
+	validates :password, presence: true, on: :create
+	validates :password, length: { minimum: 6 }, unless: Proc.new { |user| user.password.blank? }
 	
 	def feed
 	  Micropost.from_users_followed_by(self)
@@ -36,6 +37,13 @@ class User < ActiveRecord::Base
 	def unfollow!(other_user)
 	  relationships.find_by(followed_id: other_user.id).destroy!
 	end
+	
+	def send_password_reset
+	  generate_token(:password_reset_token)
+	  self.password_reset_sent_at = Time.zone.now
+	  save!
+	  Notifier.password_reset(self).deliver
+	end
 
 	def User.new_remember_token
 	  SecureRandom.urlsafe_base64
@@ -43,6 +51,12 @@ class User < ActiveRecord::Base
 
 	def User.encrypt(token)
 	  Digest::SHA1.hexdigest(token.to_s)
+	end
+	
+	def generate_token(column)
+	  begin
+		self[column] = SecureRandom.urlsafe_base64
+	  end while User.exists?(column => self[column])
 	end
 	
 	private

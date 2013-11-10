@@ -14,8 +14,10 @@ describe User do
   it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
-  it { should respond_to(:follower_notification) }
   it { should respond_to(:remember_token) }
+  it { should respond_to(:follower_notification) }
+  it { should respond_to(:password_reset_token) }
+  it { should respond_to(:password_reset_sent_at) }
   it { should respond_to(:authenticate) }
   it { should respond_to(:admin) }
   it { should respond_to(:microposts) }
@@ -241,6 +243,27 @@ describe User do
       relationships.each do |rel|
         expect(@user.relationships.where(id: rel.id)).to be_empty
       end
+    end
+  end
+  
+  describe "send password reset" do
+  	before { @user.save }
+
+  	it "generates a unique password_reset_token each time" do
+      @user.send_password_reset
+      last_token = @user.password_reset_token
+      @user.send_password_reset
+      @user.password_reset_token.should_not eq(last_token)
+    end
+
+    it "saves the time the password reset was sent" do
+      @user.send_password_reset
+      @user.reload.password_reset_sent_at.should be_present
+    end
+
+    it "delivers reset email message to user" do
+      @user.send_password_reset
+      last_email.to.should include (@user.email)
     end
   end
 end
