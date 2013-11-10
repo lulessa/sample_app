@@ -26,8 +26,14 @@ describe RelationshipsController do
       last_email.to.should include(other_user.email)
     end
     
-#    it "does not email a followed user with notification off"
-#    end
+    let(:other_user_unaware) do
+	  FactoryGirl.create(:user, follower_notification: false)
+	end
+
+    it "does not email a followed user with notification off" do
+      xhr :post, :create, relationship: { followed_id: other_user_unaware.id }
+      last_email.should be_nil
+    end
   end
 
   describe "destroying a relationship with Ajax" do

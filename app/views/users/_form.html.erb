@@ -17,6 +17,11 @@
   <%= f.label :password_confirmation, "Confirm Password" %>
   <%= f.password_field :password_confirmation %>
 
+  <%= label_tag do %>
+	  <%= f.check_box :follower_notification %>
+	  Email me when I'm followed by someone new
+  <% end %>
+
   <%= f.submit btn_txt, class: "btn btn-large btn-primary" %>
 
 <% end %>

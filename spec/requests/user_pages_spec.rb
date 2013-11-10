@@ -169,6 +169,7 @@ describe "User pages" do
         fill_in "Email",        with: "user@example.com"
         fill_in "Password",     with: "foobar"
         fill_in "Confirm Password", with: "foobar"
+        check	"user_follower_notification"
       end
 
       it "should create a user" do
@@ -211,6 +212,7 @@ describe "User pages" do
         fill_in "Email",            with: new_email
         fill_in "Password",         with: user.password
         fill_in "Confirm Password", with: user.password
+        uncheck	"user_follower_notification"
         click_button save_changes
       end
 
