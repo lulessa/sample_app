@@ -1,8 +1,13 @@
 class Notifier < ActionMailer::Base
+  default from: "from@example.com"
+  def follower_notification(user, follower)
+	@user = user
+	@follower = follower
+	mail(:to => "#{user.name} <#{user.email}>", :subject => "#{follower.name} is following you")
+  end
   
-  def registration_confirmation(user)
+  def signup_confirmation(user)
     @user = user
-    attachments["rails.png"] = File.read("#{Rails.root}/public/images/rails.png")
     mail(:to => "#{user.name} <#{user.email}>", :subject => "Registered")
   end
 end
