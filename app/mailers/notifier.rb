@@ -1,5 +1,6 @@
 class Notifier < ActionMailer::Base
   default from: "from@example.com"
+
   def follower_notification(user, follower)
 	@user = user
 	@follower = follower

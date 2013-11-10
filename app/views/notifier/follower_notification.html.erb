@@ -1,10 +1,10 @@
-<%= @user.name %>,
+<p><%= @user.name %>,</p>
 
-@follower.name (<%= link_to "@#{@follower.username}", user_url(@follower) %>) is following you on Sample App.
+<p><%= @follower.name %> (<%= link_to "@#{@follower.username}", user_url(@follower) %>) is following you on Sample App.</p>
 
-You can <%= link_to "change your settings for notifications", edit_user_url(@user) %>
+<p>You can <%= link_to "change your settings for notifications", edit_user_url(@user) %></p>
 
-<%= link_to "Sign in to micropost something", root_url %>
+<p><%= link_to "Sign in to micropost something", root_url %></p>
 
-Regards,
-Sample App
+<p>Regards,
+<br>Sample App</p>

@@ -19,6 +19,15 @@ describe RelationshipsController do
       xhr :post, :create, relationship: { followed_id: other_user.id }
       expect(response).to be_success
     end
+
+    it "emails followed user" do
+      xhr :post, :create, relationship: { followed_id: other_user.id }
+      last_email.should_not be_nil
+      last_email.to.should include(other_user.email)
+    end
+    
+#    it "does not email a followed user with notification off"
+#    end
   end
 
   describe "destroying a relationship with Ajax" do
