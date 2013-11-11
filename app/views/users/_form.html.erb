@@ -11,11 +11,7 @@
   <%= f.label :email %>
   <%= f.text_field :email %>
 
-  <%= f.label :password %>
-  <%= f.password_field :password %>
-
-  <%= f.label :password_confirmation, "Confirm Password" %>
-  <%= f.password_field :password_confirmation %>
+  <%= render 'shared/password_fields', f: f %>
 
   <%= label_tag do %>
 	  <%= f.check_box :follower_notification %>
