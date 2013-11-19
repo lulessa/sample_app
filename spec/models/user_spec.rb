@@ -18,6 +18,8 @@ describe User do
   it { should respond_to(:follower_notification) }
   it { should respond_to(:password_reset_token) }
   it { should respond_to(:password_reset_sent_at) }
+  it { should respond_to(:state) }
+  it { should respond_to(:confirm_token) }
   it { should respond_to(:authenticate) }
   it { should respond_to(:admin) }
   it { should respond_to(:microposts) }
@@ -28,9 +30,15 @@ describe User do
   it { should respond_to(:follow!) }
   it { should respond_to(:reverse_relationships) }
   it { should respond_to(:followers) }
+  it { should respond_to(:active?) }
+  it { should respond_to(:inactive?) }
+  it { should respond_to(:activate) }
+  it { should respond_to(:deactivate) }
   
   it { should be_valid }
   it { should_not be_admin }
+  it { should_not be_active }
+  it { should be_inactive }
 
   describe "with admin attribute set to 'true'" do
     before do
@@ -161,9 +169,11 @@ describe User do
 	end
   end
 
-  describe "remember token" do
+  describe "remember token, confirm token, and state" do
     before { @user.save }
     its(:remember_token) { should_not be_blank }
+	its(:confirm_token) { should_not be_blank }
+	its(:confirm_token) { should include @user.id.to_s }
   end
 
   describe "micropost associations" do
@@ -265,5 +275,15 @@ describe User do
       @user.send_password_reset
       last_email.to.should include (@user.email)
     end
+  end
+  
+  describe "confirm user email address" do
+  	before { @user.save }
+  	
+  	describe "activate" do
+	  before { @user.activate }
+	  
+	  it { should be_active }
+  	end
   end
 end

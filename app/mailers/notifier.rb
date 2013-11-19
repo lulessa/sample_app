@@ -7,6 +7,11 @@ class Notifier < ActionMailer::Base
 	mail(:to => "#{user.name} <#{user.email}>", :subject => "#{follower.name} is following you")
   end
   
+  def confirm_email(user)
+    @user = user
+    mail(to: "#{user.name} <#{user.email}>", subject: "Please confirm your email address")
+  end
+  
   def signup_confirmation(user)
     @user = user
     mail(:to => "#{user.name} <#{user.email}>", :subject => "Registered")
