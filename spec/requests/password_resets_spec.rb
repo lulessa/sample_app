@@ -20,6 +20,7 @@ describe "PasswordResets" do
 
   it "does not email invalid user when requesting password reset" do
     user = FactoryGirl.create(:user)
+    reset_email
     visit signin_path
     click_link forgot_link
     fill_in "Email", :with => "notarealuser@example.com"

@@ -8,8 +8,7 @@ class User < ActiveRecord::Base
 	has_many :followers, through: :reverse_relationships, source: :follower
 
 	before_save { email.downcase! }
-	before_create :create_remember_token
-	after_create :create_confirm_token, :send_email_confirmation
+	before_create :create_remember_token, :create_confirm_token
 	validates :name, presence: true, length: { maximum: 50 }
 	validates :username, presence: true, 
 						 length: { maximum: 30 },
@@ -83,7 +82,5 @@ class User < ActiveRecord::Base
 	  
 	  def create_confirm_token
 	  	generate_token(:confirm_token)
-	  	self.confirm_token += ".#{self.id}"
-	  	save!
 	  end
 end

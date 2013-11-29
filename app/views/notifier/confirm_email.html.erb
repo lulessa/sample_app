@@ -3,4 +3,5 @@
 <p>Thanks for signing up! You are just one step away from having an active account.</p>
 
 <p><%= link_to "Activate Your Account",
-			edit_password_reset_url(@user.confirm_token) %></p>
+			edit_activate_account_url(id: @user.id,
+					token: @user.confirm_token) %></p>

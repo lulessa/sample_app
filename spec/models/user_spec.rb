@@ -173,7 +173,6 @@ describe User do
     before { @user.save }
     its(:remember_token) { should_not be_blank }
 	its(:confirm_token) { should_not be_blank }
-	its(:confirm_token) { should include @user.id.to_s }
   end
 
   describe "micropost associations" do
@@ -280,9 +279,15 @@ describe User do
   describe "confirm user email address" do
   	before { @user.save }
   	
-  	describe "activate" do
+#  	describe "delivers email with confirmation link" do
+#	  @user.send_email_confirmation
+#	  last_email.should_not be_nil
+#	  last_email.to.should include @user.email
+#	  last_email.subject.should eq "Please confirm your email address"
+#  	end
+  	
+  	describe "activate user" do
 	  before { @user.activate }
-	  
 	  it { should be_active }
   	end
   end

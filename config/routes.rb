@@ -9,7 +9,7 @@ SampleApp::Application.routes.draw do
   resources :microposts, only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
   resources :password_resets
-  resources :activate_accounts, only: [:update]
+  resources :activate_accounts
   root 'static_pages#home'
   match '/signup',  to: 'users#new',            via: 'get'
   match '/signin',	to: 'sessions#new',			via: 'get'

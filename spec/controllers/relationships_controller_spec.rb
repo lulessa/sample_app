@@ -4,6 +4,9 @@ describe RelationshipsController do
 
   let(:user) { FactoryGirl.create(:user) }
   let(:other_user) { FactoryGirl.create(:user) }
+  let(:other_user_unaware) do
+	FactoryGirl.create(:user, follower_notification: false)
+  end
 
   before { sign_in user, no_capybara: true }
 
@@ -25,10 +28,6 @@ describe RelationshipsController do
       last_email.should_not be_nil
       last_email.to.should include(other_user.email)
     end
-    
-    let(:other_user_unaware) do
-	  FactoryGirl.create(:user, follower_notification: false)
-	end
 
     it "does not email a followed user with notification off" do
       xhr :post, :create, relationship: { followed_id: other_user_unaware.id }
