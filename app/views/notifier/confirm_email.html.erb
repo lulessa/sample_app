@@ -1,0 +1,7 @@
+<p><%= @user.name %>,</p>
+
+<p>Thanks for signing up! You are just one step away from having an active account.</p>
+
+<p><%= link_to "Activate Your Account",
+			edit_activate_account_url(id: @user.id,
+					token: @user.confirm_token) %></p>

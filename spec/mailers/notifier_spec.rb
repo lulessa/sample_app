@@ -29,4 +29,19 @@ describe Notifier do
       mail.body.encoded.should match(edit_password_reset_path(user.password_reset_token))
     end
   end
+
+  describe "confirm email address" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:mail) { Notifier.confirm_email(user) }
+    
+	it "sends message with confirm link" do
+      mail.subject.should eq("Please confirm your email address")
+      mail.to.should eq([user.email])
+      mail.from.should eq(["from@example.com"])
+      mail.body.encoded.should include ( 
+      	edit_activate_account_url(id: user.id,
+								  token: user.confirm_token)
+	  )
+	end
+  end
 end

@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
 	has_many :followers, through: :reverse_relationships, source: :follower
 
 	before_save { email.downcase! }
-	before_create :create_remember_token
+	before_create :create_remember_token, :create_confirm_token
 	validates :name, presence: true, length: { maximum: 50 }
 	validates :username, presence: true, 
 						 length: { maximum: 30 },
@@ -20,6 +20,18 @@ class User < ActiveRecord::Base
 					  uniqueness: { case_sensitive: false }
 	has_secure_password
 	validates :password, length: { minimum: 6 }, unless: Proc.new { |user| user.password.blank? }
+	state_machine initial: :inactive do
+		state :inactive, value: 0
+		state :active, value: 1
+		
+		event :activate do
+		  transition :inactive => :active
+		end
+
+		event :deactivate do
+		  transition :active => :inactive
+		end
+	end
 	
 	def feed
 	  Micropost.from_users_followed_by(self)
@@ -43,6 +55,10 @@ class User < ActiveRecord::Base
 	  save!
 	  Notifier.password_reset(self).deliver
 	end
+	
+	def send_email_confirmation
+	  Notifier.confirm_email(self).deliver
+	end
 
 	def User.new_remember_token
 	  SecureRandom.urlsafe_base64
@@ -62,5 +78,9 @@ class User < ActiveRecord::Base
 	
 	  def create_remember_token
 	  	self.remember_token = User.encrypt(User.new_remember_token)
+	  end
+	  
+	  def create_confirm_token
+	  	generate_token(:confirm_token)
 	  end
 end

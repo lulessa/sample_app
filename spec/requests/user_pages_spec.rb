@@ -162,10 +162,11 @@ describe "User pages" do
     end
 
     describe "with valid information" do
+	  let(:user_email) { "user@example.com" }
       before do
         fill_in "Name",         with: "Example User"
         fill_in "Username",     with: "exampleuser"
-        fill_in "Email",        with: "user@example.com"
+        fill_in "Email",        with: user_email
         fill_in "Password",     with: "foobar"
         fill_in "Confirm Password", with: "foobar"
         check	"user_follower_notification"
@@ -175,9 +176,15 @@ describe "User pages" do
         expect { click_button submit }.to change(User, :count).by(1)
       end
 
+#	  describe "delivers signup confirmation message to user" do
+#		last_email.should_not be_nil
+#		last_email.to.should == user_email
+#		last_email.subject.should include("confirm")
+#	  end
+
 	  describe "after saving the user" do
         before { click_button submit }
-        let(:user) { User.find_by(email: 'user@example.com') }
+        let(:user) { User.find_by(email: user_email) }
 
         it { should have_link('Sign out') }
         it { should have_title(user.name) }

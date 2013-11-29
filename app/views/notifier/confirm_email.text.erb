@@ -1,0 +1,8 @@
+<%= @user.name %>,
+
+Thanks for signing up! You are just one step away from having an active account.
+
+To confirm your email address and activate your account, go to the address below:
+
+<%= edit_activate_account_url(id: @user.id,
+					token: @user.confirm_token) %>
